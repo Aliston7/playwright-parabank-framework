@@ -1,3 +1,5 @@
+const { expect } = require('@playwright/test');
+
 class LoginPage {
 
   constructor(page) {
@@ -29,6 +31,17 @@ class LoginPage {
 
     await this.logoutLink.click();
   }
+
+
+  async isLoginSuccessful() {
+
+    await expect(this.page).toHaveURL(/overview/);
+
+  }
+
+  async verifyLogoutSuccess() {
+   await expect(this.page).toHaveURL(/index\.htm/);
 }
 
+}
 module.exports = { LoginPage };

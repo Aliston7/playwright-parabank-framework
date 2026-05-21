@@ -1,8 +1,8 @@
 const { test, expect } =
   require('@playwright/test');
 
-const { LoginPage } =
-  require('../pages/LoginPage');
+const { LoginPage } = require('../pages/LoginPage');
+
 
 test('valid user can login', async ({ page }) => {
 
@@ -10,9 +10,10 @@ test('valid user can login', async ({ page }) => {
 
   await loginPage.goto();
 
-  await loginPage.login(process.env.USERNAME, process.env.PASSWORD);
+  await loginPage.login(process.env.PARABANK_USERNAME, process.env.PARABANK_PASSWORD);
 
-  await expect(page).toHaveURL(/overview/);
+
+  await loginPage.isLoginSuccessful();
 });
 
 test('invalid user cannot login', async ({ page }) => {
@@ -24,7 +25,7 @@ test('invalid user cannot login', async ({ page }) => {
   await loginPage.login('wrongUser', 'wrongPassword');
 
   await expect(
-    page.locator('.error')).toContainText('An internal error has occurred');
+    page.locator('.error')).toContainText('The username and password could not be verified.');
 });
 
 test('empty credentials should show error', async ({ page }) => {
@@ -45,9 +46,10 @@ test('user can logout',  async ({ page }) => {
 
   await loginPage.goto();
 
-  await loginPage.login(process.env.USERNAME, process.env.PASSWORD);
+  await loginPage.login(process.env.PARABANK_USERNAME,process.env.PARABANK_PASSWORD);
 
   await loginPage.logout();
+  
+  await loginPage.verifyLogoutSuccess();
 
-  await expect(page).toHaveURL(/index/);
 });
